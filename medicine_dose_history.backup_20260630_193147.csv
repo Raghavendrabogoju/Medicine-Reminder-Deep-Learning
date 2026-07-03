@@ -1,0 +1,2 @@
+Date,Time,SessionID,Medicine,Dose,Event,ReminderNumber,PillTakenStatus,Message,Confidence,Box
+2026-06-30,19:22:05,,15 g tablet,1 tablet,dose_instruction,0,Pending,Waiting for patient to take medicine,0.560,0 63 312 480

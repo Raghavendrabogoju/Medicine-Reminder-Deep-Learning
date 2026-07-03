@@ -1,0 +1,10 @@
+Date,Time,SessionID,Medicine,Dose,Event,ReminderNumber,PillTakenStatus,Message,Confidence,Box,EvidenceFile
+2026-06-30,19:22:05,,15 g tablet,1 tablet,dose_instruction,0,Pending,Waiting for patient to take medicine,0.560,0 63 312 480,
+2026-06-30,19:35:22,20260630_193516,15 g tablet,1 tablet,dose_instruction,0,Pending,Please take 1 tablet of 15 g tablet now.,0.577,1 67 327 477,dose_evidence\dose_20260630_193516.mp4
+2026-06-30,19:35:29,20260630_193516,15 g tablet,1 tablet,taken_confirmed_manual,0,Taken,Operator confirmed tablet was taken while video evidence was recording.,0.658,323 132 544 372,dose_evidence\dose_20260630_193516.mp4
+2026-06-30,19:35:50,20260630_193545,15 g tablet,1 tablet,dose_instruction,0,Pending,Please take 1 tablet of 15 g tablet now.,0.906,436 143 638 295,dose_evidence\dose_20260630_193545.mp4
+2026-06-30,19:35:52,20260630_193545,15 g tablet,1 tablet,taken_confirmed_manual,0,Taken,Operator confirmed tablet was taken while video evidence was recording.,0.906,436 143 638 295,dose_evidence\dose_20260630_193545.mp4
+2026-06-30,19:36:19,20260630_193616,15 g tablet,1 tablet,dose_instruction,0,Pending,Please take 1 tablet of 15 g tablet now.,0.785,263 183 583 422,dose_evidence\dose_20260630_193616.mp4
+2026-06-30,19:36:21,20260630_193616,15 g tablet,1 tablet,taken_confirmed_manual,0,Taken,Operator confirmed tablet was taken while video evidence was recording.,0.785,263 183 583 422,dose_evidence\dose_20260630_193616.mp4
+2026-06-30,19:38:21,20260630_193811,15 g tablet,1 tablet,dose_instruction,0,Pending,Please take 1 tablet of 15 g tablet now.,0.742,0 83 364 480,dose_evidence\dose_20260630_193811.mp4
+2026-06-30,19:38:27,20260630_193811,15 g tablet,1 tablet,taken_confirmed_manual,0,Taken,Operator confirmed tablet was taken while video evidence was recording.,0.786,0 109 367 473,dose_evidence\dose_20260630_193811.mp4
