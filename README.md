@@ -1,45 +1,22 @@
-# Medicine Reminder System — Single Class (MedicineStrip)
+# Medicine Reminder System — Deep Learning with YOLO11
 
-## Folder structure
+This project uses a trained YOLO11 neural network to detect a single
+`MedicineStrip` class. OpenCV is used only to capture and display webcam
+frames; it does not perform the medicine detection. The trained detector
+provides the visual input for the reminder and dose-history workflow.
+
+## Dataset
 
 ```
-MedicineReminderProject/
-├── Medicine_Reminder_System.ipynb   <- run this
-├── data.yaml                        <- dataset config (1 class: MedicineStrip)
-├── train/
-│   ├── images/                      <- 10 images already here
-│   └── labels/                      <- EMPTY — you still need to label these
-├── valid/
-│   ├── images/                      <- 3 images already here
-│   └── labels/                      <- EMPTY — you still need to label these
-├── test/
-│   ├── images/                      <- 2 images already here
-│   └── labels/                      <- EMPTY — you still need to label these
-└── detection_history.csv            <- created automatically the first time you run Part 5
+data.yaml
+train/images/    train/labels/
+valid/images/    valid/labels/
+test/images/     test/labels/
 ```
 
-`best.pt` is NOT included — it gets created when you run the training
-cells in the notebook (Part 4), saved at
-`runs/detect/train/weights/best.pt`. Copy or rename that file to
-`best.pt` in this project's root folder before running Part 5
-(real-time detection), or just edit `MODEL_PATH` in the notebook to
-point at the `runs/detect/...` path directly.
-
-## Before you can train: labeling
-
-The `images/` folders already have your 15 photos split 10/3/2, but
-**none of them have bounding-box labels yet** — that step can't be
-automated. Use Roboflow (recommended, free, browser-based) or
-LabelImg (offline) to draw a box around the strip in each image and
-export/save in YOLO format so a `.txt` file lands next to each image
-in the matching `labels/` folder. See the earlier `LABELING_GUIDE.md`
-I sent you if you need the walkthrough again.
-
-Heads up: 15 images is small for object detection. It's enough to get
-the whole pipeline working end-to-end, but don't be surprised if the
-first trained model is shaky outside the backgrounds/angles it's seen.
-Add more photos with `capture_images.py` any time and retrain — no
-need to start over, just relabel the new ones and merge them in.
+YOLO-format bounding-box labels are provided alongside the images. The
+current dataset is small, so collect and label more varied images before
+relying on model predictions outside the training conditions.
 
 ## Setup
 
@@ -47,9 +24,8 @@ need to start over, just relabel the new ones and merge them in.
 pip install ultralytics opencv-python pyttsx3 pandas pyyaml
 ```
 
-GPU is optional but speeds up training a lot. If you don't have one,
-change `device=0` to `device="cpu"` in the training cell (Part 4) —
-training will just take longer.
+GPU is optional. The notebook automatically selects CUDA when available
+and otherwise trains on CPU.
 
 ## Quick dose reminder
 
@@ -59,12 +35,14 @@ Run this from the project folder:
 venv\Scripts\python.exe real_time_strip_detector.py --conf 0.08 --confirm-seconds 2 --medicine "15 g tablet" --dose "1 tablet" --reminder-interval 120 --max-reminders 3
 ```
 
-The script opens the webcam, detects `MedicineStrip`, speaks
+The script opens the webcam, uses the trained YOLO11 model to detect
+`MedicineStrip`, speaks
 "Please take 1 tablet of 15 g tablet now", records a short video clip
 for that dose session, and logs dose events to `medicine_dose_history.csv`.
-It automatically uses the newer trained model at
-`C:\Users\HANUMAN NARAYANA\OneDrive\Apps\Desktop\runs\detect\train-2\weights\best.pt`
-when available.
+Train the model using the notebook before starting the reminder system.
+By default, the script selects the newest trained checkpoint under
+`runs/detect/train*/weights/best.pt` (or a root-level `best.pt`). Pass
+`--model path\to\best.pt` to select a different checkpoint.
 
 After the dose message, the script watches whether the detected strip
 leaves the camera view for a few seconds. If it does, it logs `Taken`.
@@ -105,12 +83,10 @@ venv\Scripts\python.exe real_time_strip_detector.py --test-voice --voice-index 2
 ## Running it
 
 1. Open `Medicine_Reminder_System.ipynb` in Jupyter.
-2. Run Part 1–4 top to bottom to train the model (only needs to be
-   done once, or again later if you add more photos).
-3. Confirm `best.pt` exists / `MODEL_PATH` points to your trained
-   weights.
-4. Run Part 5 to start the real-time webcam reminder system.
-   Press `q` in the webcam window to quit.
+2. Run Parts 1–4 to fine-tune YOLO11 on the labeled strip dataset and
+   evaluate predictions.
+3. Run Part 5 to use the trained detector with the real-time reminder
+   system. Press `q` in the webcam window to quit.
 
 ## What the reminder logic does
 

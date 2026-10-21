@@ -10,13 +10,7 @@ import pyttsx3
 from ultralytics import YOLO
 
 
-DEFAULT_MODEL_CANDIDATES = [
-    Path(r"C:\Users\HANUMAN NARAYANA\OneDrive\Apps\Desktop\runs\detect\train-2\weights\best.pt"),
-    Path(r"C:\Users\HANUMAN NARAYANA\OneDrive\Apps\Desktop\runs\detect\train\weights\best.pt"),
-    Path("runs/detect/train-2/weights/best.pt"),
-    Path("runs/detect/train/weights/best.pt"),
-    Path("yolo11n.pt"),
-]
+DEFAULT_MODEL_CANDIDATES = [Path("best.pt")]
 
 LOCAL_TIMEZONE = ZoneInfo("Asia/Kolkata")
 
@@ -37,16 +31,25 @@ def clean_for_speech(text):
 def resolve_model_path(model_path=None):
     if model_path:
         path = Path(model_path)
-        if not path.exists():
+        if not path.is_file():
             raise FileNotFoundError(f"Model not found: {path}")
         return path
 
-    for path in DEFAULT_MODEL_CANDIDATES:
-        if path.exists():
+    trained_models = sorted(
+        Path("runs/detect").glob("train*/weights/best.pt"),
+        key=lambda path: path.stat().st_mtime,
+        reverse=True,
+    )
+    candidates = trained_models + DEFAULT_MODEL_CANDIDATES
+    for path in candidates:
+        if path.is_file():
             return path
 
-    candidates = "\n".join(f"  - {path}" for path in DEFAULT_MODEL_CANDIDATES)
-    raise FileNotFoundError(f"No model found. Tried:\n{candidates}")
+    tried = "\n".join(f"  - {path}" for path in candidates)
+    raise FileNotFoundError(
+        "No trained YOLO model found. Run Part 4 in the notebook or pass --model.\n"
+        f"Tried:\n{tried}"
+    )
 
 
 CSV_COLUMNS = [
